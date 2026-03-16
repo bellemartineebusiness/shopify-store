@@ -1,0 +1,396 @@
+{% doc %}
+  Renders all store legal policies on a single, elegant page.
+  Pulls Privacy Policy, Terms of Service, Refund Policy and Shipping Policy
+  from the native Shopify shop policy objects. Cookie Policy is configurable
+  via a rich-text section setting.
+
+  https://shopify.dev/docs/api/liquid/objects/shop#shop-privacy_policy
+
+  @example
+  {% section 'policies' %}
+{% enddoc %}
+
+{%- liquid
+  assign has_any_policy = false
+  if shop.privacy_policy
+    assign has_any_policy = true
+  endif
+  if shop.terms_of_service
+    assign has_any_policy = true
+  endif
+  if shop.refund_policy
+    assign has_any_policy = true
+  endif
+  if shop.shipping_policy
+    assign has_any_policy = true
+  endif
+  if section.settings.cookie_policy != blank
+    assign has_any_policy = true
+  endif
+-%}
+
+<div class="policies">
+
+  <div class="policies__hero">
+    <p class="policies__brand">{{ shop.name }}</p>
+    <h1 class="policies__title">{{ 'policies.page_title' | t }}</h1>
+    <p class="policies__subtitle">{{ 'policies.page_subtitle' | t }}</p>
+  </div>
+
+  <nav class="policies__toc" aria-label="{{ 'policies.toc_label' | t }}">
+    <ul class="policies__toc-list">
+      {% if shop.privacy_policy %}
+        <li><a href="#privacy-policy">{{ 'policies.privacy_policy' | t }}</a></li>
+      {% endif %}
+      {% if shop.terms_of_service %}
+        <li><a href="#terms-of-service">{{ 'policies.terms_of_service' | t }}</a></li>
+      {% endif %}
+      {% if shop.refund_policy %}
+        <li><a href="#refund-policy">{{ 'policies.refund_policy' | t }}</a></li>
+      {% endif %}
+      {% if shop.shipping_policy %}
+        <li><a href="#shipping-policy">{{ 'policies.shipping_policy' | t }}</a></li>
+      {% endif %}
+      {% if section.settings.cookie_policy != blank %}
+        <li><a href="#cookie-policy">{{ 'policies.cookie_policy' | t }}</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <div class="policies__content">
+
+    {% if shop.privacy_policy %}
+      <details class="policies__item" id="privacy-policy" open>
+        <summary class="policies__item-header">
+          <span>{{ 'policies.privacy_policy' | t }}</span>
+          <span class="policies__item-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="policies__item-body">
+          {% if shop.privacy_policy.updated_at %}
+            <p class="policies__item-meta">{{ 'policies.last_updated' | t }}: {{ shop.privacy_policy.updated_at | date: '%B %d, %Y' }}</p>
+          {% endif %}
+          {{ shop.privacy_policy.body }}
+        </div>
+      </details>
+    {% endif %}
+
+    {% if shop.terms_of_service %}
+      <details class="policies__item" id="terms-of-service">
+        <summary class="policies__item-header">
+          <span>{{ 'policies.terms_of_service' | t }}</span>
+          <span class="policies__item-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="policies__item-body">
+          {% if shop.terms_of_service.updated_at %}
+            <p class="policies__item-meta">{{ 'policies.last_updated' | t }}: {{ shop.terms_of_service.updated_at | date: '%B %d, %Y' }}</p>
+          {% endif %}
+          {{ shop.terms_of_service.body }}
+        </div>
+      </details>
+    {% endif %}
+
+    {% if shop.refund_policy %}
+      <details class="policies__item" id="refund-policy">
+        <summary class="policies__item-header">
+          <span>{{ 'policies.refund_policy' | t }}</span>
+          <span class="policies__item-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="policies__item-body">
+          {% if shop.refund_policy.updated_at %}
+            <p class="policies__item-meta">{{ 'policies.last_updated' | t }}: {{ shop.refund_policy.updated_at | date: '%B %d, %Y' }}</p>
+          {% endif %}
+          {{ shop.refund_policy.body }}
+        </div>
+      </details>
+    {% endif %}
+
+    {% if shop.shipping_policy %}
+      <details class="policies__item" id="shipping-policy">
+        <summary class="policies__item-header">
+          <span>{{ 'policies.shipping_policy' | t }}</span>
+          <span class="policies__item-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="policies__item-body">
+          {% if shop.shipping_policy.updated_at %}
+            <p class="policies__item-meta">{{ 'policies.last_updated' | t }}: {{ shop.shipping_policy.updated_at | date: '%B %d, %Y' }}</p>
+          {% endif %}
+          {{ shop.shipping_policy.body }}
+        </div>
+      </details>
+    {% endif %}
+
+    {% if section.settings.cookie_policy != blank %}
+      <details class="policies__item" id="cookie-policy">
+        <summary class="policies__item-header">
+          <span>{{ 'policies.cookie_policy' | t }}</span>
+          <span class="policies__item-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="policies__item-body">
+          {{ section.settings.cookie_policy }}
+        </div>
+      </details>
+    {% endif %}
+
+    {% unless has_any_policy %}
+      <p class="policies__empty">{{ 'policies.no_policies' | t }}</p>
+    {% endunless %}
+
+  </div>
+
+</div>
+
+{% stylesheet %}
+  .policies {
+    padding: 2rem 0 4rem;
+  }
+
+  /* ── Hero ── */
+  .policies__hero {
+    text-align: center;
+    padding: 3rem 0 2.5rem;
+    border-bottom: 1px solid currentColor;
+    margin-bottom: 2.5rem;
+  }
+
+  .policies__brand {
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    opacity: 0.45;
+    margin-bottom: 1rem;
+  }
+
+  .policies__title {
+    font-size: clamp(1.75rem, 5vw, 3.25rem);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .policies__subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    opacity: 0.55;
+    max-width: 36rem;
+    margin-inline: auto;
+    line-height: 1.7;
+  }
+
+  /* ── Table of contents ── */
+  .policies__toc {
+    margin-bottom: 2.5rem;
+  }
+
+  .policies__toc-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.25rem;
+    justify-content: center;
+  }
+
+  .policies__toc-list a {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: currentColor;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    display: inline-block;
+  }
+
+  .policies__toc-list a:hover,
+  .policies__toc-list a:focus-visible {
+    opacity: 1;
+    border-bottom-color: currentColor;
+    outline: none;
+  }
+
+  /* ── Accordion list ── */
+  .policies__content {
+    border-top: 1px solid currentColor;
+  }
+
+  .policies__item {
+    border-bottom: 1px solid currentColor;
+  }
+
+  /* ── Accordion header (summary) ── */
+  .policies__item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+    user-select: none;
+    gap: 1rem;
+  }
+
+  .policies__item-header::-webkit-details-marker {
+    display: none;
+  }
+
+  .policies__item-header::marker {
+    display: none;
+  }
+
+  /* ── Plus / minus icon ── */
+  .policies__item-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .policies__item-icon::before,
+  .policies__item-icon::after {
+    content: '';
+    position: absolute;
+    background-color: currentColor;
+    transition: transform 0.3s ease, opacity 0.25s ease;
+    top: 50%;
+    left: 50%;
+  }
+
+  .policies__item-icon::before {
+    width: 0.9rem;
+    height: 1px;
+    transform: translate(-50%, -50%);
+  }
+
+  .policies__item-icon::after {
+    width: 1px;
+    height: 0.9rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .policies__item[open] .policies__item-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  /* ── Accordion body ── */
+  .policies__item-body {
+    padding-bottom: 2.5rem;
+    line-height: 1.85;
+    font-size: 0.9rem;
+  }
+
+  .policies__item-body > * + * {
+    margin-top: 0.75rem;
+  }
+
+  .policies__item-body h2,
+  .policies__item-body h3,
+  .policies__item-body h4 {
+    margin-top: 1.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+
+  .policies__item-body p {
+    opacity: 0.8;
+  }
+
+  .policies__item-body ul,
+  .policies__item-body ol {
+    padding-left: 1.5rem;
+    opacity: 0.8;
+  }
+
+  .policies__item-body li {
+    margin-bottom: 0.35rem;
+  }
+
+  .policies__item-body a {
+    color: currentColor;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ── Meta (last updated) ── */
+  .policies__item-meta {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    opacity: 0.4;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    margin-top: 0 !important;
+  }
+
+  /* ── Empty state ── */
+  .policies__empty {
+    padding: 3rem 0;
+    text-align: center;
+    opacity: 0.45;
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  /* ── Responsive ── */
+  @media (min-width: 750px) {
+    .policies {
+      padding: 2rem 0 5rem;
+    }
+
+    .policies__hero {
+      padding: 4.5rem 0 3.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .policies__toc {
+      margin-bottom: 3rem;
+    }
+
+    .policies__toc-list {
+      gap: 0.4rem 2.5rem;
+    }
+
+    .policies__item-header {
+      padding: 1.75rem 0;
+      font-size: 0.8rem;
+    }
+
+    .policies__item-body {
+      padding-bottom: 3rem;
+      font-size: 0.95rem;
+      max-width: 72ch;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .policies__hero {
+      padding: 6rem 0 4.5rem;
+    }
+
+    .policies__item-body {
+      font-size: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:policies.section_name",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "cookie_policy",
+      "label": "t:policies.cookie_policy_label",
+      "info": "t:policies.cookie_policy_info"
+    }
+  ]
+}
+{% endschema %}

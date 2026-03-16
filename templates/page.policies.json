@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "policies",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

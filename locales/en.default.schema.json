@@ -72,6 +72,11 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
+  },
+  "policies": {
+    "section_name": "Policies",
+    "cookie_policy_label": "Cookie policy",
+    "cookie_policy_info": "Enter your cookie policy here. Unlike the other policies, this one is not managed in Shopify admin."
   }
 }
