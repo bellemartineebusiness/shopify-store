@@ -60,5 +60,40 @@
     "cookie_policy": "Cookie policy",
     "last_updated": "Last updated",
     "no_policies": "No policies have been configured yet."
+  },
+  "featured_products": {
+    "sale": "Sale",
+    "view_all": "View all",
+    "no_products": "No products found."
+  },
+  "newsletter": {
+    "email_placeholder": "Your email address",
+    "subscribe": "Subscribe",
+    "success": "Thank you for subscribing!",
+    "error": "Please enter a valid email address.",
+    "gdpr_notice_html": "By subscribing, you agree to our <a href=\"{{ privacy_url }}\">privacy policy</a>.",
+    "gdpr_notice_simple": "By subscribing, you agree to receive marketing emails. You can unsubscribe at any time."
+  },
+  "footer": {
+    "shop": "Shop",
+    "legal": "Legal",
+    "help": "Help",
+    "privacy_policy": "Privacy policy",
+    "terms_of_service": "Terms of service",
+    "refund_policy": "Refund policy",
+    "cookie_policy": "Cookie policy",
+    "contact": "Contact",
+    "about": "About us",
+    "org_number": "Org. no.",
+    "payment_methods": "We accept",
+    "navigation": "Footer navigation",
+    "social_media": "Follow us"
+  },
+  "cookie_consent": {
+    "dialog_label": "Cookie consent",
+    "message": "We use cookies to improve your experience on our site. By continuing to browse, you agree to our use of cookies.",
+    "accept": "Accept all",
+    "decline": "Decline",
+    "learn_more": "Learn more"
   }
 }

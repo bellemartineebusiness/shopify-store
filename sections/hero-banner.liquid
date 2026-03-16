@@ -1,0 +1,234 @@
+<div
+  class="hero-banner full-width"
+  style="
+    --hero-height: {{ section.settings.banner_height }};
+    --hero-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --hero-text-align: {{ section.settings.text_alignment }};
+    --hero-text-color: {{ section.settings.text_color }};
+  "
+>
+  {%- if section.settings.image -%}
+    <div class="hero-banner__media" aria-hidden="true">
+      {{
+        section.settings.image
+        | image_url: width: 2000
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'hero-banner__image',
+          widths: '375, 550, 750, 1100, 1500, 1780, 2000',
+          sizes: '100vw'
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="hero-banner__overlay" aria-hidden="true"></div>
+
+  <div class="hero-banner__content">
+    {%- if section.settings.subtitle != blank -%}
+      <p class="hero-banner__eyebrow">{{ section.settings.subtitle | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h1 class="hero-banner__heading">{{ section.settings.heading | escape }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.description != blank -%}
+      <p class="hero-banner__description">{{ section.settings.description | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <a
+        href="{{ section.settings.button_url | default: routes.all_products_collection_url }}"
+        class="hero-banner__cta"
+      >
+        {{ section.settings.button_label | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .hero-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--hero-height, 90vh);
+    overflow: hidden;
+    background-color: #111;
+  }
+
+  .hero-banner__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-banner__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-banner__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, var(--hero-overlay, 0.3));
+  }
+
+  .hero-banner__content {
+    position: relative;
+    z-index: 2;
+    text-align: var(--hero-text-align, center);
+    color: var(--hero-text-color, #fff);
+    padding: 4rem 2rem;
+    max-width: 56rem;
+    width: 100%;
+  }
+
+  .hero-banner__eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+  }
+
+  .hero-banner__heading {
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-banner__description {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    opacity: 0.85;
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+
+  .hero-banner__cta {
+    display: inline-block;
+    padding: 0.9rem 3rem;
+    border: 1px solid currentColor;
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .hero-banner__cta:hover,
+  .hero-banner__cta:focus-visible {
+    background-color: currentColor;
+    color: #111;
+  }
+
+  @media (max-width: 749px) {
+    .hero-banner__content {
+      padding: 3rem 1.5rem;
+    }
+
+    .hero-banner__description {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.hero_banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Belle Martineé"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "New Collection"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:labels.description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:labels.button_label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "t:labels.button_url"
+    },
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "t:labels.banner_height",
+      "options": [
+        { "value": "60vh", "label": "t:options.banner_height.small" },
+        { "value": "75vh", "label": "t:options.banner_height.medium" },
+        { "value": "90vh", "label": "t:options.banner_height.large" },
+        { "value": "100vh", "label": "t:options.banner_height.full" }
+      ],
+      "default": "90vh"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:labels.text_alignment",
+      "options": [
+        { "value": "left", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:labels.overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:labels.text_color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.hero_banner"
+    }
+  ]
+}
+{% endschema %}
