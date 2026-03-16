@@ -9,12 +9,50 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "subtitle": "Belle Martineé",
+        "heading": "New Collection",
+        "button_label": "Shop now",
+        "button_url": "/collections/all",
+        "banner_height": "90vh",
+        "text_alignment": "center",
+        "overlay_opacity": 30,
+        "text_color": "#FFFFFF"
+      }
+    },
+    "featured": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "Featured",
+        "products_count": 4,
+        "show_view_all": true
+      }
+    },
+    "story": {
+      "type": "brand-story",
+      "settings": {
+        "eyebrow": "Our story",
+        "heading": "Crafted with intention",
+        "text": "<p>Belle Martineé was born from a love of understated elegance. Every piece is thoughtfully designed to move with you through life — from the morning coffee to the evening gathering.</p>",
+        "button_label": "About us",
+        "button_url": "/pages/about-us",
+        "image_position": "brand-story--image-left"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Stay in touch",
+        "description": "Sign up for early access to new collections and exclusive offers."
+      }
     }
   },
   "order": [
-    "main"
+    "hero",
+    "featured",
+    "story",
+    "newsletter"
   ]
 }

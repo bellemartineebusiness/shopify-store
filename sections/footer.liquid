@@ -1,39 +1,276 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
+<footer class="footer full-width">
+  <div class="footer__inner">
+
+    <div class="footer__brand">
+      <a href="{{ routes.root_url }}" class="footer__logo" aria-label="{{ shop.name }}">
+        {{ shop.name }}
+      </a>
+      {%- if section.settings.tagline != blank -%}
+        <p class="footer__tagline">{{ section.settings.tagline | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.social_instagram != blank
+        or section.settings.social_facebook != blank
+        or section.settings.social_tiktok != blank
+      -%}
+        <ul class="footer__social" role="list" aria-label="{{ 'footer.social_media' | t }}">
+          {%- if section.settings.social_instagram != blank -%}
+            <li>
+              <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                Instagram
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.social_facebook != blank -%}
+            <li>
+              <a href="{{ section.settings.social_facebook }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                Facebook
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.social_tiktok != blank -%}
+            <li>
+              <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                TikTok
+              </a>
+            </li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <nav class="footer__nav" aria-label="{{ 'footer.navigation' | t }}">
+      {%- if section.settings.menu != blank -%}
+        <div class="footer__nav-column">
+          <p class="footer__nav-title">{{ 'footer.shop' | t }}</p>
+          <ul role="list">
+            {%- for link in linklists[section.settings.menu].links -%}
+              <li>
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      <div class="footer__nav-column">
+        <p class="footer__nav-title">{{ 'footer.legal' | t }}</p>
+        <ul role="list">
+          {%- if shop.privacy_policy != blank -%}
+            <li><a href="{{ shop.privacy_policy.url }}">{{ 'footer.privacy_policy' | t }}</a></li>
+          {%- endif -%}
+          {%- if shop.terms_of_service != blank -%}
+            <li><a href="{{ shop.terms_of_service.url }}">{{ 'footer.terms_of_service' | t }}</a></li>
+          {%- endif -%}
+          {%- if shop.refund_policy != blank -%}
+            <li><a href="{{ shop.refund_policy.url }}">{{ 'footer.refund_policy' | t }}</a></li>
+          {%- endif -%}
+          {%- if shop.privacy_policy != blank -%}
+            <li><a href="{{ shop.privacy_policy.url }}#cookie-policy">{{ 'footer.cookie_policy' | t }}</a></li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      <div class="footer__nav-column">
+        <p class="footer__nav-title">{{ 'footer.help' | t }}</p>
+        <ul role="list">
+          <li><a href="{{ section.settings.contact_url | default: '/pages/contact' }}">{{ 'footer.contact' | t }}</a></li>
+          <li><a href="{{ section.settings.about_url | default: '/pages/about-us' }}">{{ 'footer.about' | t }}</a></li>
+          {%- if section.settings.contact_email != blank -%}
+            <li>
+              <a href="mailto:{{ section.settings.contact_email }}">
+                {{ section.settings.contact_email }}
+              </a>
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+    </nav>
+
   </div>
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+  <div class="footer__bottom">
+    <p class="footer__copyright">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+    </p>
+    {%- if section.settings.company_name != blank or section.settings.org_number != blank -%}
+      <p class="footer__company-info">
+        {%- if section.settings.company_name != blank -%}
+          {{ section.settings.company_name | escape }}
+        {%- endif -%}
+        {%- if section.settings.org_number != blank -%}
+          &nbsp;&middot;&nbsp;{{ 'footer.org_number' | t }}: {{ section.settings.org_number | escape }}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+    {%- if section.settings.show_payment_icons -%}
+      <div class="footer__payment-icons" aria-label="{{ 'footer.payment_methods' | t }}">
+        {%- for type in shop.enabled_payment_types -%}
+          {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
   </div>
 </footer>
 
 {% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+  .footer {
+    background-color: #111;
+    color: #fff;
+    margin-top: auto;
   }
-  footer a {
+
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding: 4rem 3rem 3rem;
+    max-width: var(--page-width);
+    margin-inline: auto;
+  }
+
+  @media (max-width: 989px) {
+    .footer__inner {
+      grid-template-columns: 1fr 1fr;
+      padding: 3rem 1.5rem 2.5rem;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .footer__inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .footer__nav {
+    display: contents;
+  }
+
+  .footer__logo {
+    display: block;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     text-decoration: none;
-    color: var(--color-foreground);
+    color: inherit;
+    margin-bottom: 1rem;
+    font-weight: 400;
   }
-  footer .footer__links,
-  footer .footer__payment {
+
+  .footer__tagline {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    max-width: 22ch;
+  }
+
+  .footer__social {
+    list-style: none;
+    padding: 0;
     display: flex;
-    gap: 1rem;
+    gap: 1.25rem;
+  }
+
+  .footer__social a {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+  }
+
+  .footer__social a:hover,
+  .footer__social a:focus-visible {
+    opacity: 1;
+  }
+
+  .footer__nav-column ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .footer__nav-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+  }
+
+  .footer__nav-column li {
+    margin-bottom: 0.75rem;
+  }
+
+  .footer__nav-column a {
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.65;
+    transition: opacity 0.2s ease;
+  }
+
+  .footer__nav-column a:hover,
+  .footer__nav-column a:focus-visible {
+    opacity: 1;
+  }
+
+  .footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  @media (max-width: 599px) {
+    .footer__bottom {
+      padding: 1.5rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+  }
+
+  .footer__copyright {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    opacity: 0.35;
+  }
+
+  .footer__company-info {
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    opacity: 0.3;
+  }
+
+  .footer__payment-icons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  @media (max-width: 599px) {
+    .footer__payment-icons {
+      margin-left: 0;
+    }
+  }
+
+  .footer__payment-icon {
+    height: 1.5rem;
+    width: auto;
+    opacity: 0.5;
   }
 {% endstylesheet %}
 
@@ -42,9 +279,67 @@
   "name": "t:general.footer",
   "settings": [
     {
+      "type": "text",
+      "id": "tagline",
+      "label": "t:labels.tagline",
+      "default": "Elegance in every detail."
+    },
+    {
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
+    },
+    {
+      "type": "header",
+      "content": "t:general.contact_info"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "t:labels.contact_email"
+    },
+    {
+      "type": "url",
+      "id": "contact_url",
+      "label": "t:labels.contact_url"
+    },
+    {
+      "type": "url",
+      "id": "about_url",
+      "label": "t:labels.about_url"
+    },
+    {
+      "type": "text",
+      "id": "company_name",
+      "label": "t:labels.company_name"
+    },
+    {
+      "type": "text",
+      "id": "org_number",
+      "label": "t:labels.org_number"
+    },
+    {
+      "type": "header",
+      "content": "t:general.social_media"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "t:labels.social_instagram"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "t:labels.social_facebook"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok",
+      "label": "t:labels.social_tiktok"
+    },
+    {
+      "type": "header",
+      "content": "t:general.settings"
     },
     {
       "type": "checkbox",
