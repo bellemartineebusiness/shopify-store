@@ -48,5 +48,17 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "policies": {
+    "page_title": "Legal policies",
+    "page_subtitle": "Our commitment to transparency and your rights as a customer",
+    "toc_label": "Table of contents",
+    "privacy_policy": "Privacy policy",
+    "terms_of_service": "Terms of service",
+    "refund_policy": "Refund policy",
+    "shipping_policy": "Shipping policy",
+    "cookie_policy": "Cookie policy",
+    "last_updated": "Last updated",
+    "no_policies": "No policies have been configured yet."
   }
 }
